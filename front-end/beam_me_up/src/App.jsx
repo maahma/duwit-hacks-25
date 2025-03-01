@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { takePhoto } from './camera.jsx'; // Make sure this file is correctly imported
+import { takePhoto } from './camera.jsx';
 
 function App() {
   const [photoURL, setPhotoURL] = useState(null);
   const [uploadMode, setUploadMode] = useState("none");
+  const [showModal, setShowModal] = useState(false);
 
   const handleTakePhoto = () => {
     if (uploadMode === "photo") {
-      takePhoto(setPhotoURL);
+      takePhoto(setPhotoURL, setShowModal);
     }
   };
 
@@ -20,12 +21,22 @@ function App() {
       reader.onloadend = () => {
         const base64data = reader.result;
         setPhotoURL(base64data);
-        if (window.confirm('Do you want to upload the photo?')) {
-          // You can call an upload function here if needed.
-        }
+        setShowModal(true);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleUpload = () => {
+    // 这里处理上传逻辑
+    console.log("Uploading photo...");
+    setShowModal(false);
+  };
+
+  const handleRetake = () => {
+    setPhotoURL(null);
+    setShowModal(false);
+    handleTakePhoto();
   };
 
   return (
@@ -50,13 +61,16 @@ function App() {
           )}
         </div>
       </header>
-      {photoURL && (
+      {showModal && photoURL && (
         <div className="modal">
           <div className="modal-content">
-            <span className="close" onClick={() => setPhotoURL(null)}>&times;</span>
-            <h2>Beam me uppppp</h2>
+            <span className="close" onClick={() => setShowModal(false)}>&times;</span>
+            <h2>Photo Preview</h2>
             <img src={photoURL} alt="Selected" className="modal-image" />
-            <a href={photoURL} download="photo.png">Download Photo</a>
+            <div className="modal-buttons">
+              <button onClick={handleUpload}>Upload</button>
+              <button onClick={handleRetake}>Retake</button>
+            </div>
           </div>
         </div>
       )}
@@ -65,60 +79,6 @@ function App() {
 }
 
 export default App;
-
-// import React, { useState } from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-// import { takePhoto } from './camera'; 
-
-// function App() {
-//   const [photoURL, setPhotoURL] = useState(null);
-//   const [uploadMode, setUploadMode] = useState("none");
-
-//   const handleTakePhoto = () => {
-//     if (uploadMode === "photo") {
-//       takePhoto(setPhotoURL); 
-//     }
-//   };
-
-
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>Mood selection here：）</p>
-//         <select value={uploadMode} onChange={(e) => setUploadMode(e.target.value)}>
-//           <option value="none">Do you want to take a photo</option>
-//           <option value="none">Nope, I don't have mood</option>
-//           <option value="photo">Take Photo and Upload</option>
-//           <option value="file">Upload from Folder</option>
-//         </select>
-//         <div>
-//           {uploadMode === "photo" && (
-//             <button className="App-link" onClick={handleTakePhoto}>
-//               Take Photo
-//             </button>
-//           )}
-//           {uploadMode === "file" && (
-//             <input type="file" accept="image/*" onChange={handleFileChange} />
-//           )}
-//         </div>
-//       </header>
-//       {photoURL && (
-//         <div className="modal">
-//           <div className="modal-content">
-//             <span className="close" onClick={() => setPhotoURL(null)}>&times;</span>
-//             <h2>Beam me uppppp</h2>
-//             <img src={photoURL} alt="Selected" className="modal-image" />
-//             <a href={photoURL} download="photo.png">Download Photo</a>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default App;
 
 // import React, { useState } from 'react';
 // import logo from './logo.svg';
