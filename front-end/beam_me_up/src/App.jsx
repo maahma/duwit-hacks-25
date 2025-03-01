@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
+import logo_heart from './heart.svg';
 import './App.css';
 import { takePhoto } from './camera.jsx';
 
@@ -41,7 +42,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={logo_heart} className="App-logo" alt="logo" />
         <p>Mood selection here:）</p>
         <select value={uploadMode} onChange={(e) => setUploadMode(e.target.value)}>
           <option value="none">Do you want to take a photo</option>
