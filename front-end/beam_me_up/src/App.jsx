@@ -28,7 +28,6 @@ function App() {
   };
 
   const handleUpload = () => {
-    // 这里处理上传逻辑
     console.log("Uploading photo...");
     setShowModal(false);
   };
