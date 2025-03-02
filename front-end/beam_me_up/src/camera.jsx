@@ -1,5 +1,5 @@
 // camera.jsx
-export const takePhoto = async (setPhotoURL) => {
+export const takePhoto = async (setPhotoURL, setShowModal) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       const videoElement = document.createElement('video');
@@ -25,10 +25,8 @@ export const takePhoto = async (setPhotoURL) => {
   
         stream.getTracks().forEach(track => track.stop());
         document.body.removeChild(videoElement);
-  
-        if (window.confirm('Do you want to upload the photo?')) {
-          // You can handle the upload logic or call another function here if needed
-        }
+
+        setShowModal(true)
       };
   
       setTimeout(takeSnapshot, 3000);

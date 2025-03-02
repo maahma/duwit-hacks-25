@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import Emotions from "./emotions"; // Import the Emotions component
 import MoodDetails from "./MoodDetails"; // Import the MoodDetails component
 import "./App.css"; // Import CSS for styling
+import { takePhoto } from "./camera";
 
 const App = () => {
   const [selectedMood, setSelectedMood] = useState(null); // Track the selected mood
   const [showMoodDetails, setShowMoodDetails] = useState(false); // Track if mood details should be shown
+  const [photoURL, setPhotoURL] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Function to handle mood selection
   const handleMoodClick = (mood) => {
@@ -18,6 +21,21 @@ const App = () => {
     setSelectedMood(null);
     setShowMoodDetails(false);
   };
+
+  const handleTakePhoto = () => {
+    takePhoto(setPhotoURL,setShowModal);
+  }
+
+  const handleRetake = () => {
+    setPhotoURL(null);
+    setShowModal(false);
+    handleTakePhoto();
+  }
+
+  const handleUpload = () => {
+    console.log("uploading photo...");
+    setShowModal(false);
+  }
 
   // Generate stars and clouds for the background
   useEffect(() => {
@@ -68,8 +86,21 @@ const App = () => {
       {showMoodDetails && (
         <MoodDetails mood={selectedMood} onBack={handleBack} />
       )}
-    </div>
+
+      {showModal && photoURL && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Photo Preview</h2>
+            <img src={photoURL} alt="Captured" style={{ maxWidth: "100%" }} />
+            <div className="modal-buttons">
+              <button onClick={handleUpload}>Upload</button>
+              <button onClick={handleRetake}>Retake</button>
+            </div>
+          </div>
+        </div> 
+      )}
+    </div> 
   );
-};
+}
 
 export default App;
