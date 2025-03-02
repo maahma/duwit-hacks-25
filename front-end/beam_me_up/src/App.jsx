@@ -84,11 +84,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-<<<<<<< HEAD
-        <img src={logo_heart} className="App-logo" alt="logo" />
-=======
+
       <img src={logo} className="App-logo" alt="logo" />
->>>>>>> photo-create
         <p>Mood selection here:）</p>
         <select value={uploadMode} onChange={(e) => setUploadMode(e.target.value)}>
           <option value="none">Do you want to take a photo</option>
