@@ -1,36 +1,22 @@
 const express = require("express")
-const Emotion = require("../models/emotionsModel")
+const {
+    createEmotions,
+    getAllEmotions,
+    getEmotion,
+    deleteEmotion
+} = require("../controllers/emotionController")
 const router = express.Router()
 
 // gets all the emotions
-router.get('/', (req, res) => {
-    res.json({mssg: "GET all emotions"})
-})
+router.get('/', getAllEmotions)
 
 // GET a single emotion
-router.get('/:id', (req, res) => {
-    res.json({mssg: "GET a single emotion"})
-})
+router.get('/:id', getEmotion)
 
 // POST a new emotion
-router.post('/', async(req, res) => {
-    const {title} = req.body
-    try {
-        const emotion = await Emotion.create({title})
-        res.status(200).json(emotion)
-    } catch(error){
-        res.status(400).json({error: error.message})
-    }
-})
+router.post('/', createEmotions)
 
 // DELETE an emotion
-router.delete('/:id', (req, res) => {
-    res.json({mssg: "DELETE an emotion"})
-})
-
-// UPDATE an emotion
-router.patch('/:id', (req, res) => {
-    res.json({mssg: "UPDATE an emotion"})
-})
+router.delete('/:id', deleteEmotion)
 
 module.exports = router

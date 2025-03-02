@@ -1,18 +1,16 @@
 // import modules
 const express = require("express");
 const mongoose = require("mongoose");
-const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 const emotionRoutes = require("./routes/emotion_log")
-const { auth } = require('express-openid-connect');
+const geminiRoutes = require("./routes/geminiRoutes");
 
 // app
 const app = express();
 
 // middleware
 app.use(express.json());
-app.use(morgan("dev"));
 app.use(cors({ origin: true, credentials: true }));
 
 app.use((req, res, next) => {
@@ -20,22 +18,9 @@ app.use((req, res, next) => {
     next()
 })
 
-// auth0
-const config = {
-    authRequired: false,
-    auth0Logout: true,
-    baseURL: process.env.BASE_URL,
-    clientID: process.env.CLIENT_ID,
-    issuerBaseURL: process.env.ISSUER_BASE_URL, 
-    secret: process.env.SECRET
-  };
-
-
-// auth router attaches /login, /logout, and /callback routes to the baseURL
-app.use(auth(config));
-
 // routes
 app.use('/api/emotions', emotionRoutes)  // attaches all the routes related to a emotion
+app.use("/api/gemini", geminiRoutes);
 
 //connect to db
 mongoose.connect(process.env.DB_URI).then(() => {
