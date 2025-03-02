@@ -1,0 +1,79 @@
+.mood-details-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .sub-emotions-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .sub-mood-button {
+    position: relative;
+    display: inline-block;
+    width: 7.5em;
+    height: 7.5em;
+    margin: 1em;
+    background-color: #FC0;
+    clip-path: polygon(
+      50% 0%,
+      61% 35%,
+      98% 35%,
+      68% 57%,
+      79% 91%,
+      50% 70%,
+      21% 91%,
+      32% 57%,
+      2% 35%,
+      39% 35%
+    );
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+    line-height: 3em;
+  }
+  
+  .sub-mood-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .photo-options-container {
+    margin-top: 20px;
+  }
+  
+  .photo-options-container button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    transition: background-color 0.2s ease;
+  }
+  
+  .photo-options-container button:hover {
+    background-color: #218838;
+  }
+  
+  .back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #dc3545;
+    color: white;
+    transition: background-color 0.2s ease;
+  }
+  
+  .back-button:hover {
+    background-color: #c82333;
+  }
