@@ -39,7 +39,6 @@ const Photo = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <p>Mood selection here:）</p>
         <select value={uploadMode} onChange={(e) => setUploadMode(e.target.value)}>
           <option value="none">Do you want to take a photo</option>
           <option value="none">Nope, I don't have mood</option>

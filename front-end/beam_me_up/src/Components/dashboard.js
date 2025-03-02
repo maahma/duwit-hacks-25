@@ -1,4 +1,5 @@
 import React from 'react';
+import Emotions from '../emotions.jsx';
 
 function Dashboard() {
   return (
@@ -8,7 +9,10 @@ function Dashboard() {
         <p>Your daily mood check-in buddy</p>
         <div className="mood-history"></div>
       </div>
-    </div>
+
+      {/* Mood Tracker Component */}
+      <Emotions />
+    </div> 
   );
 }
 

@@ -16,7 +16,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use((req, res, next) => {
     console.log(req.path, req.method)
     next()
-})
+}) 
 
 // routes
 app.use('/api/emotions', emotionRoutes)  // attaches all the routes related to a emotion
