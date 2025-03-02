@@ -16,6 +16,9 @@ function App() {
   const [advice, setAdvice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedSvg, setSelectedSvg] = useState(null);
+
+
 
   const handleTakePhoto = () => {
     if (uploadMode === "photo") {
