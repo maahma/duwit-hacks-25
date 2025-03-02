@@ -49,31 +49,32 @@ function App() {
 
   const handleMoodSubmit = async () => {
     if (!mood.trim()) {
-      setError("Please enter your mood before requesting advice.");
-      return;
+        setError("Please enter your mood before requesting advice.");
+        return;
     }
-  
+
     setIsLoading(true);
     setError("");
     setAdvice("");
-  
+
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash"});
-  
-      const prompt = `The user is feeling ${mood}. Please provide a short, positive, and encouraging piece of advice to help improve their mood. Keep the response under 100 words.`;
-  
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
-  
-      setAdvice(text);
+        const response = await fetch("/api/chat-with-gemini", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userMessage: mood }),
+        });
+
+        const data = await response.json();
+        setAdvice(data.reply);
     } catch (error) {
-      console.error('Error fetching advice:', error);
-      setError("Sorry, I couldn't get advice at this time. Please try again later.");
+        console.error('Error fetching advice:', error);
+        setError("Sorry, I couldn't get advice at this time. Please try again later.");
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+};
 
 
   return (
