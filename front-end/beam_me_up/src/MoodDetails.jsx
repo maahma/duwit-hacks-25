@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import "./MoodDetails.css"; // Import CSS for styling
+import Photos from "./photo.jsx"
+import GeminiChat from "./geminiChat.jsx"
 
 const MoodDetails = ({ mood, onBack }) => {
   const [selectedSubMood, setSelectedSubMood] = useState(null);
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
+  
 
   // Sub-emotions for the selected mood
   const subEmotions = {
@@ -55,8 +58,10 @@ const MoodDetails = ({ mood, onBack }) => {
       {showPhotoOptions && (
         <div className="photo-options-container">
           <h3>Do you want to post a photo with your mood?</h3>
-          <button onClick={() => handlePostMood(true)}>Take/Choose a Photo</button>
+          {/*<button onClick={() => handlePostMood(true)}>Take/Choose a Photo</button>*/}
+          <Photos />
           <button onClick={() => handlePostMood(false)}>Post Only Mood</button>
+          <GeminiChat />
         </div>
       )}
 
