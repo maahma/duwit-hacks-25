@@ -79,11 +79,14 @@ function App() {
   return (
     <div className="App">
       <div className="App-header">
+        {/* Navigation Dots */}
         <div className="indicator">
           <div className="dot active" data-page="1"></div>
           <div className="dot" data-page="2"></div>
           <div className="dot" data-page="3"></div>
         </div>
+
+        {/* Dashboard Section */}
         <div id="dashboard-page" className="page">
           <div className="dashboard-container">
             <h1>Welcome to your Mood Tracker</h1>
@@ -91,16 +94,21 @@ function App() {
             <div className="mood-history"></div>
           </div>
         </div>
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
+
+        {/* Mood Tracker Component */}
         <Emotions />
+
+        {/* Upload Mode Selection */}
         <select value={uploadMode} onChange={(e) => setUploadMode(e.target.value)}>
-          <option value="none">Do you want to take a photo</option>
-          <option value="none">Nope, I don't have mood</option>
+          <option value="none">Do you want to take a photo?</option>
+          <option value="no_mood">Nope, I don't have a mood</option>
           <option value="photo">Take Photo and Upload</option>
           <option value="file">Upload from Folder</option>
         </select>
+
+        {/* Photo Upload Section */}
         <div>
-           {uploadMode === "photo" && (
+          {uploadMode === "photo" && (
             <button className="App-link" onClick={handleTakePhoto}>
               Take Photo
             </button>
@@ -109,6 +117,8 @@ function App() {
             <input type="file" accept="image/*" onChange={handleFileChange} />
           )}
         </div>
+
+        {/* Mood Input Section */}
         <div className="mood-section">
           <h2>How are you feeling today?</h2>
           <div className="mood-input">
@@ -124,34 +134,41 @@ function App() {
               disabled={isLoading}
               className="mood-submit-button"
             >
-              {isLoading ? 'Getting Advice...' : 'Get Advice'}
+              {isLoading ? "Getting Advice..." : "Get Advice"}
             </button>
           </div>
+
+          {/* Error & Advice Display */}
           {error && <p className="error-message">{error}</p>}
           {advice && (
             <div className="advice-section">
-              <h3 >Here's some advice for you:</h3>
+              <h3>Here's some advice for you:</h3>
               <p className="advice-text">{advice}</p>
             </div>
           )}
         </div>
-      {showModal && photoURL && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={() => setShowModal(false)}>&times;</span>
-            <h2>Photo Preview</h2>
-            <img src={photoURL} alt="Selected" className="modal-image" />
-            <div className="modal-buttons">
-              <button onClick={handleUpload}>Upload</button>
-              <button onClick={handleRetake}>Retake</button>
+
+        {/* Modal for Photo Preview */}
+        {showModal && photoURL && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={() => setShowModal(false)}>
+                &times;
+              </span>
+              <h2>Photo Preview</h2>
+              <img src={photoURL} alt="Selected" className="modal-image" />
+              <div className="modal-buttons">
+                <button onClick={() => console.log("Uploading photo...")}>Upload</button>
+                <button onClick={() => setPhotoURL(null)}>Retake</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      
+        )}
+      </div>
     </div>
   );
 }
 
 export default App;
+
 
