@@ -105,3 +105,60 @@
   padding: 10px 20px;
   font-size: 16px;
 }
+
+.mood-section {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.mood-input {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.mood-text-input {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.mood-submit-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.mood-submit-button:hover {
+  background-color: #45a049;
+}
+
+.mood-submit-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ff0000;
+  margin-top: 10px;
+}
+
+.advice-section {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #c3bdd7;
+  border-radius: 8px;
+}
+
+.advice-text {
+  /* font-style: italic; */
+  line-height: 1.6;
+  color: #404653;
+}
