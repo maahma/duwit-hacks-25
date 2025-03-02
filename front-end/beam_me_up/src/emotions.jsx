@@ -2,32 +2,37 @@ import React, { useState } from "react";
 import "./emotions.css"; // Import CSS for styling
 
 const Emotions = () => {
-  // State to track the current emotion level
-  const [isSubEmotion, setIsSubEmotion] = useState(false);
+  // State to track the currently clicked emotion
+  const [clickedEmotion, setClickedEmotion] = useState(null);
 
-  // Main emotions and their corresponding sub-emotions
+  // Emotion data with their respective colors
   const emotions = {
-    happiness: ["joyful", "cheerful", "pleased", "amazed", "content", "excited"],
-    sadness: ["melancholy", "sorrowful", "gloomy", "heartbroken", "wistful", "despodent"],
-    fear: ["terrified", "anxious", "nervous", "panicked", "worried", "scared"],
-    disgust: ["repulsed", "revolted", "nauseated", "appalled", "grossed", "..."],
-    anger: ["furious", "irritated", "enraged", "livid", "anoyed", "resentful"],
+    happiness: { color: "rgb(250, 195, 14)", subEmotions: ["joyful", "cheerful", "pleased", "amazed", "content", "excited"] },
+    sadness: { color: "rgb(4, 40, 201)", subEmotions: ["melancholy", "sorrowful", "gloomy", "heartbroken", "wistful", "despodent"] },
+    fear: { color: "rgb(89, 17, 190)", subEmotions: ["terrified", "anxious", "nervous", "panicked", "worried", "scared"] },
+    disgust: { color: "rgb(7, 117, 11)", subEmotions: ["repulsed", "revolted", "nauseated", "appalled", "grossed", "..."] },
+    anger: { color: "rgb(203, 3, 3)", subEmotions: ["furious", "irritated", "enraged", "livid", "anoyed", "resentful"] },
   };
 
   // Function to handle button click
-  const handleEmotionClick = () => {
-    setIsSubEmotion(!isSubEmotion); // Toggle between main and sub-emotions
+  const handleEmotionClick = (emotion) => {
+    setClickedEmotion(emotion); // Set the clicked emotion
   };
 
   return (
     <div className="emotions-container">
-      {Object.keys(emotions).map((emotion, index) => (
+      {Object.entries(emotions).map(([emotion, data], index) => (
         <button
-          key={index}
+          key={emotion}
           className="star-button"
-          onClick={handleEmotionClick}
+          style={{
+            backgroundColor: clickedEmotion ? emotions[clickedEmotion].color : data.color, // Change color based on clicked emotion
+          }}
+          onClick={() => handleEmotionClick(emotion)}
         >
-          {isSubEmotion ? emotions[emotion][index] : emotion}
+          {clickedEmotion
+            ? emotions[clickedEmotion].subEmotions[index] // Show sub-emotion if an emotion is clicked
+            : emotion} {/* Show main emotion otherwise */}
         </button>
       ))}
     </div>
