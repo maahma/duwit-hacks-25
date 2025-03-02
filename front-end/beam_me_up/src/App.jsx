@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Emotions from "./emotions"; // Import the Emotions component
 import MoodDetails from "./MoodDetails"; // Import the MoodDetails component
 import "./App.css"; // Import CSS for styling
@@ -19,9 +19,47 @@ const App = () => {
     setShowMoodDetails(false);
   };
 
+  // Generate stars and clouds for the background
+  useEffect(() => {
+    const spaceBackground = document.querySelector(".space-background");
+
+    // Generate stars
+    for (let i = 0; i < 50; i++) {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.width = `${Math.random() * 3 + 1}px`;
+      star.style.height = star.style.width;
+
+      // Some stars are more yellowish
+      if (Math.random() > 0.7) {
+        star.style.backgroundColor = "#fffbcc";
+      }
+
+      spaceBackground.appendChild(star);
+    }
+
+    // Generate clouds
+    for (let i = 0; i < 10; i++) {
+      const cloud = document.createElement("div");
+      cloud.classList.add("cloud");
+      cloud.style.top = `${Math.random() * 100}%`;
+      cloud.style.left = `${Math.random() * 100}%`;
+      cloud.style.width = `${Math.random() * 300 + 100}px`;
+      cloud.style.height = `${Math.random() * 100 + 50}px`;
+      spaceBackground.appendChild(cloud);
+    }
+  }, []);
+
   return (
     <div className="App">
-      <h1>Welcome to your Mood Tracker. Your daily mood check-in will arrive at a random time.</h1>
+      {/* Space Background */}
+      <div className="space-background"></div>
+
+      {/* Main Content */}
+      <h1>Welcome to your Mood Tracker.</h1>
+      <p>Your daily mood check-in will arrive at a random time.</p>
 
       {/* Show the Emotions component if no mood is selected */}
       {!showMoodDetails && <Emotions onMoodClick={handleMoodClick} />}
