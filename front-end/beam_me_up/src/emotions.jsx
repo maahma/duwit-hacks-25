@@ -1,33 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import "./emotions.css"; // Import CSS for styling
 
-const Emotions = () => {
-  // State to track the current emotion level
-  const [isSubEmotion, setIsSubEmotion] = useState(false);
-
-  // Main emotions and their corresponding sub-emotions
+const Emotions = ({ onMoodClick }) => {
+  // Emotion data with their respective colors
   const emotions = {
-    happiness: ["joyful", "cheerful", "pleased", "amazed", "content", "excited"],
-    sadness: ["melancholy", "sorrowful", "gloomy", "heartbroken", "wistful", "despodent"],
-    fear: ["terrified", "anxious", "nervous", "panicked", "worried", "scared"],
-    disgust: ["repulsed", "revolted", "nauseated", "appalled", "grossed", "..."],
-    anger: ["furious", "irritated", "enraged", "livid", "anoyed", "resentful"],
-  };
-
-  // Function to handle button click
-  const handleEmotionClick = () => {
-    setIsSubEmotion(!isSubEmotion); // Toggle between main and sub-emotions
+    happiness: { color: "yellow", subEmotions: ["joyful", "cheerful", "pleased", "amazed", "content", "excited"] },
+    sadness: { color: "blue", subEmotions: ["melancholy", "sorrowful", "gloomy", "heartbroken", "wistful", "despodent"] },
+    fear: { color: "purple", subEmotions: ["terrified", "anxious", "nervous", "panicked", "worried", "scared"] },
+    disgust: { color: "green", subEmotions: ["repulsed", "revolted", "nauseated", "appalled", "grossed", "..."] },
+    anger: { color: "red", subEmotions: ["furious", "irritated", "enraged", "livid", "anoyed", "resentful"] },
   };
 
   return (
     <div className="emotions-container">
-      {Object.keys(emotions).map((emotion, index) => (
+      {Object.entries(emotions).map(([emotion, data]) => (
         <button
-          key={index}
+          key={emotion}
           className="star-button"
-          onClick={handleEmotionClick}
+          style={{ backgroundColor: data.color }}
+          onClick={() => onMoodClick(emotion)}
         >
-          {isSubEmotion ? emotions[emotion][index] : emotion}
+          {emotion}
         </button>
       ))}
     </div>

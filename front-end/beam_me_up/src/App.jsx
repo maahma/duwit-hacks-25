@@ -1,171 +1,105 @@
-import React, { useState } from 'react';
-import './App.css';
-import { takePhoto } from './camera.jsx';
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import Emotions from './emotions.jsx';
+import React, { useState, useEffect } from "react";
+import Emotions from "./emotions"; // Import the Emotions component
+import MoodDetails from "./MoodDetails"; // Import the MoodDetails component
+import "./App.css"; // Import CSS for styling
+import { takePhoto } from "./camera";
 
-// Initialize the API
-const genAI = new GoogleGenerativeAI('AIzaSyC7hsFMssBldoRVYYwJAnnGNbyzbjCqebA');
-
-function App() {
+const App = () => {
+  const [selectedMood, setSelectedMood] = useState(null); // Track the selected mood
+  const [showMoodDetails, setShowMoodDetails] = useState(false); // Track if mood details should be shown
   const [photoURL, setPhotoURL] = useState(null);
-  const [uploadMode, setUploadMode] = useState("none");
   const [showModal, setShowModal] = useState(false);
-  const [uploadOption, setUploadOption] = useState("");
-  const [mood, setMood] = useState("");
-  const [advice, setAdvice] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+
+  // Function to handle mood selection
+  const handleMoodClick = (mood) => {
+    setSelectedMood(mood);
+    setShowMoodDetails(true); // Show the mood details component
+  };
+
+  // Function to go back to the main mood selection screen
+  const handleBack = () => {
+    setSelectedMood(null);
+    setShowMoodDetails(false);
+  };
 
   const handleTakePhoto = () => {
-    if (uploadMode === "photo") {
-      takePhoto(setPhotoURL, setShowModal);
-    }
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64data = reader.result;
-        setPhotoURL(base64data);
-        setShowModal(true);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleUpload = () => {
-    console.log("Uploading photo...");
-    setShowModal(false);
-  };
+    takePhoto(setPhotoURL,setShowModal);
+  }
 
   const handleRetake = () => {
     setPhotoURL(null);
     setShowModal(false);
     handleTakePhoto();
-  };
+  }
 
-  const handleMoodSubmit = async () => {
-    if (!mood.trim()) {
-      setError("Please enter your mood before requesting advice.");
-      return;
-    }
-  
-    setIsLoading(true);
-    setError("");
-    setAdvice("");
-  
-    try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash"});
-  
-      const prompt = `The user is feeling ${mood}. Please provide a short, positive, and encouraging piece of advice to help improve their mood. Keep the response under 100 words.`;
-  
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
-  
-      setAdvice(text);
-    } catch (error) {
-      console.error('Error fetching advice:', error);
-      setError("Sorry, I couldn't get advice at this time. Please try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleUpload = () => {
+    console.log("uploading photo...");
+    setShowModal(false);
+  }
 
+  // Generate stars and clouds for the background
+  useEffect(() => {
+    const spaceBackground = document.querySelector(".space-background");
+
+    // Generate stars
+    for (let i = 0; i < 50; i++) {
+      const star = document.createElement("div");
+      star.classList.add("star");
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.width = `${Math.random() * 3 + 1}px`;
+      star.style.height = star.style.width;
+
+      // Some stars are more yellowish
+      if (Math.random() > 0.7) {
+        star.style.backgroundColor = "#fffbcc";
+      }
+
+      spaceBackground.appendChild(star);
+    }
+
+    // Generate clouds
+    for (let i = 0; i < 10; i++) {
+      const cloud = document.createElement("div");
+      cloud.classList.add("cloud");
+      cloud.style.top = `${Math.random() * 100}%`;
+      cloud.style.left = `${Math.random() * 100}%`;
+      cloud.style.width = `${Math.random() * 300 + 100}px`;
+      cloud.style.height = `${Math.random() * 100 + 50}px`;
+      spaceBackground.appendChild(cloud);
+    }
+  }, []);
 
   return (
     <div className="App">
-      <div className="App-header">
-        {/* Navigation Dots */}
-        <div className="indicator">
-          <div className="dot active" data-page="1"></div>
-          <div className="dot" data-page="2"></div>
-          <div className="dot" data-page="3"></div>
-        </div>
+      {/* Space Background */}
+      <div className="space-background"></div>
 
-        {/* Dashboard Section */}
-        <div id="dashboard-page" className="page">
-          <div className="dashboard-container">
-            <h1>Welcome to your Mood Tracker</h1>
-            <p>Your daily mood check-in will arrive at a random time.</p>
-            <div className="mood-history"></div>
-          </div>
-        </div>
+      {/* Main Content */}
+      <h1>Welcome to your Mood Tracker.</h1>
+      <p>Your daily mood check-in will arrive at a random time.</p>
 
-        {/* Mood Tracker Component */}
-        <Emotions />
+      {/* Show the Emotions component if no mood is selected */}
+      {!showMoodDetails && <Emotions onMoodClick={handleMoodClick} />}
 
-        {/* Upload Mode Selection */}
-        <select value={uploadMode} onChange={(e) => setUploadMode(e.target.value)}>
-          <option value="none">Do you want to take a photo?</option>
-          <option value="no_mood">Nope, I don't have a mood</option>
-          <option value="photo">Take Photo and Upload</option>
-          <option value="file">Upload from Folder</option>
-        </select>
+      {/* Show the MoodDetails component if a mood is selected */}
+      {showMoodDetails && (
+        <MoodDetails mood={selectedMood} onBack={handleBack} />
+      )}
 
-        {/* Photo Upload Section */}
-        <div>
-          {uploadMode === "photo" && (
-            <button className="App-link" onClick={handleTakePhoto}>
-              Take Photo
-            </button>
-          )}
-          {uploadMode === "file" && (
-            <input type="file" accept="image/*" onChange={handleFileChange} />
-          )}
-        </div>
-
-        {/* Mood Input Section */}
-        <div className="mood-section">
-          <h2>How are you feeling today?</h2>
-          <div className="mood-input">
-            <input
-              type="text"
-              value={mood}
-              onChange={(e) => setMood(e.target.value)}
-              placeholder="Enter your mood"
-              className="mood-text-input"
-            />
-            <button 
-              onClick={handleMoodSubmit} 
-              disabled={isLoading}
-              className="mood-submit-button"
-            >
-              {isLoading ? "Getting Advice..." : "Get Advice"}
-            </button>
-          </div>
-
-          {/* Error & Advice Display */}
-          {error && <p className="error-message">{error}</p>}
-          {advice && (
-            <div className="advice-section">
-              <h3>Here's some advice for you:</h3>
-              <p className="advice-text">{advice}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Modal for Photo Preview */}
-        {showModal && photoURL && (
-          <div className="modal">
-            <div className="modal-content">
-              <span className="close" onClick={() => setShowModal(false)}>
-                &times;
-              </span>
-              <h2>Photo Preview</h2>
-              <img src={photoURL} alt="Selected" className="modal-image" />
-              <div className="modal-buttons">
-                <button onClick={() => console.log("Uploading photo...")}>Upload</button>
-                <button onClick={() => setPhotoURL(null)}>Retake</button>
-              </div>
+      {showModal && photoURL && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Photo Preview</h2>
+            <img src={photoURL} alt="Captured" style={{ maxWidth: "100%" }} />
+            <div className="modal-buttons">
+              <button onClick={handleUpload}>Upload</button>
+              <button onClick={handleRetake}>Retake</button>
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        </div> 
+      )}
+    </div> 
   );
 }
 
